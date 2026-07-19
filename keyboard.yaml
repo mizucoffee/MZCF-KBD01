@@ -1,0 +1,523 @@
+meta:
+  engine: 4.1.0
+  name: ansi60_split
+  version: 0.2
+
+# ANSI 80% (TKL) 相当の左右分割版 (87キー: スペースを 3.5u + 4u に分割)
+# 最下段は 左: Ctrl/Win/Alt(1.25u) + Space(3.5u), 右: Space(4u) + Alt/Super/Ctrl(1.25u)。
+# 右手側に F行 + ナビゲーションブロック (PrtSc/ScrLk/Pause, Ins/Home/PgUp, Del/End/PgDn, 矢印) を持つ。
+# 分割点はタッチタイピングの運指に合わせて Esc+F1-F4|F5-F12, 5|6, T|Y, G|H, B|N。
+# 1行 = 1ゾーンとして定義し、行ごとのスタッガーは anchor.shift で表現する。
+# ゾーン名は l/r プレフィックスで左右を区別し、外形や PCB のフィルタ (/^l/, /^r/) に使う。
+# U = 19.05mm (1u キーピッチ)。キー幅は width と、外形生成用の幅タグ (k100=1u, k125=1.25u, ...) で表現する。
+
+units:
+  # 左右の間隔 (左手ブロック右端から右手ブロック左端まで)
+  splitgap: 30
+
+points:
+  key:
+    spread: 1U
+    padding: 1U
+    width: 1U
+    height: 1U
+    tags: [k100]
+
+  zones:
+    # ================ 左手 ================
+    # ---- F行: Esc [1uギャップ] F1 F2 F3 F4 (数字行との縦ピッチは 1.5U) ----
+    lfn:
+      anchor:
+        shift: [0.5U, 1.5U]
+      rows:
+        r:
+          row_net: R0
+      columns:
+        esc: { key.column_net: C0 }
+        f1:
+          key:
+            spread: 2U
+            column_net: C1
+        f2: { key.column_net: C2 }
+        f3: { key.column_net: C3 }
+        f4: { key.column_net: C4 }
+
+    # ---- 数字行: ` 1 2 3 4 5 ----
+    lnum:
+      anchor:
+        shift: [0.5U, 0]
+      rows:
+        r:
+          row_net: R1
+      columns:
+        grv: { key.column_net: C0 }
+        n1: { key.column_net: C1 }
+        n2: { key.column_net: C2 }
+        n3: { key.column_net: C3 }
+        n4: { key.column_net: C4 }
+        n5: { key.column_net: C5 }
+
+    # ---- Tab行: Tab(1.5u) Q W E R T ----
+    ltab:
+      anchor:
+        shift: [0.75U, -1U]
+      rows:
+        r:
+          row_net: R2
+      columns:
+        tab:
+          key:
+            width: 1.5U
+            tags: [k150]
+            column_net: C0
+        q:
+          key:
+            spread: 1.25U
+            column_net: C1
+        w: { key.column_net: C2 }
+        e: { key.column_net: C3 }
+        r: { key.column_net: C4 }
+        t: { key.column_net: C5 }
+
+    # ---- ホーム行: Caps(1.75u) A S D F G ----
+    lhome:
+      anchor:
+        shift: [0.875U, -2U]
+      rows:
+        r:
+          row_net: R3
+      columns:
+        caps:
+          key:
+            width: 1.75U
+            tags: [k175]
+            column_net: C0
+        a:
+          key:
+            spread: 1.375U
+            column_net: C1
+        s: { key.column_net: C2 }
+        d: { key.column_net: C3 }
+        f: { key.column_net: C4 }
+        g: { key.column_net: C5 }
+
+    # ---- シフト行: LShift(2.25u) Z X C V B ----
+    lshift:
+      anchor:
+        shift: [1.125U, -3U]
+      rows:
+        r:
+          row_net: R4
+      columns:
+        lsft:
+          key:
+            width: 2.25U
+            tags: [k225]
+            column_net: C0
+        z:
+          key:
+            spread: 1.625U
+            column_net: C1
+        x: { key.column_net: C2 }
+        c: { key.column_net: C3 }
+        v: { key.column_net: C4 }
+        b: { key.column_net: C5 }
+
+    # ---- 最下段: Ctrl/Win/Alt(1.25u) Space(3.5u) ----
+    lbot:
+      anchor:
+        shift: [0.625U, -4U]
+      rows:
+        r:
+          row_net: R5
+      columns:
+        lctl:
+          key:
+            width: 1.25U
+            tags: [k125]
+            column_net: C0
+        lgui:
+          key:
+            spread: 1.25U
+            width: 1.25U
+            tags: [k125]
+            column_net: C1
+        lalt:
+          key:
+            spread: 1.25U
+            width: 1.25U
+            tags: [k125]
+            column_net: C2
+        spc:
+          key:
+            spread: 2.375U
+            width: 3.5U
+            tags: [k350]
+            column_net: C3
+
+    # ================ 右手 ================
+    # ---- F行: F5 F6 F7 F8 [0.5uギャップ] F9 F10 F11 F12 ----
+    rfn:
+      anchor:
+        shift: [7U + splitgap, 1.5U]
+      rows:
+        r:
+          row_net: R0
+      columns:
+        f5: { key.column_net: C0 }
+        f6: { key.column_net: C1 }
+        f7: { key.column_net: C2 }
+        f8: { key.column_net: C3 }
+        f9:
+          key:
+            spread: 1.5U
+            column_net: C4
+        f10: { key.column_net: C5 }
+        f11: { key.column_net: C6 }
+        f12: { key.column_net: C7 }
+
+    # ---- 数字行: 6 7 8 9 0 - = Backspace(2u) ----
+    rnum:
+      anchor:
+        shift: [6.5U + splitgap, 0]
+      rows:
+        r:
+          row_net: R1
+      columns:
+        n6: { key.column_net: C0 }
+        n7: { key.column_net: C1 }
+        n8: { key.column_net: C2 }
+        n9: { key.column_net: C3 }
+        n0: { key.column_net: C4 }
+        minus: { key.column_net: C5 }
+        equal: { key.column_net: C6 }
+        bksp:
+          key:
+            spread: 1.5U
+            width: 2U
+            tags: [k200]
+            column_net: C7
+
+    # ---- Tab行: Y U I O P [ ] \(1.5u) ----
+    rtab:
+      anchor:
+        shift: [7U + splitgap, -1U]
+      rows:
+        r:
+          row_net: R2
+      columns:
+        y: { key.column_net: C0 }
+        u: { key.column_net: C1 }
+        i: { key.column_net: C2 }
+        o: { key.column_net: C3 }
+        p: { key.column_net: C4 }
+        lbrc: { key.column_net: C5 }
+        rbrc: { key.column_net: C6 }
+        bsls:
+          key:
+            spread: 1.25U
+            width: 1.5U
+            tags: [k150]
+            column_net: C7
+
+    # ---- ホーム行: H J K L ; ' Enter(2.25u) ----
+    rhome:
+      anchor:
+        shift: [7.25U + splitgap, -2U]
+      rows:
+        r:
+          row_net: R3
+      columns:
+        h: { key.column_net: C0 }
+        j: { key.column_net: C1 }
+        k: { key.column_net: C2 }
+        l: { key.column_net: C3 }
+        scln: { key.column_net: C4 }
+        quot: { key.column_net: C5 }
+        ent:
+          key:
+            spread: 1.625U
+            width: 2.25U
+            tags: [k225]
+            column_net: C6
+
+    # ---- シフト行: N M , . / RShift(2.75u) ----
+    rshift:
+      anchor:
+        shift: [7.75U + splitgap, -3U]
+      rows:
+        r:
+          row_net: R4
+      columns:
+        n: { key.column_net: C0 }
+        m: { key.column_net: C1 }
+        comm: { key.column_net: C2 }
+        dot: { key.column_net: C3 }
+        slsh: { key.column_net: C4 }
+        rsft:
+          key:
+            spread: 1.875U
+            width: 2.75U
+            tags: [k275]
+            column_net: C5
+
+    # ---- 最下段: Space(4u) Alt/Win/Ctrl(1.25u) ----
+    rbot:
+      anchor:
+        shift: [9.25U + splitgap, -4U]
+      rows:
+        r:
+          row_net: R5
+      columns:
+        spc:
+          key:
+            width: 4U
+            tags: [k400]
+            column_net: C0
+        ralt:
+          key:
+            spread: 2.625U
+            width: 1.25U
+            tags: [k125]
+            column_net: C1
+        rgui:
+          key:
+            spread: 1.25U
+            width: 1.25U
+            tags: [k125]
+            column_net: C2
+        rctl:
+          key:
+            spread: 1.25U
+            width: 1.25U
+            tags: [k125]
+            column_net: C3
+
+    # ======== 右手ナビゲーションブロック (80% / TKL 相当, 本体から 0.25U 右) ========
+    # ---- PrtSc ScrLk Pause (F行の高さ) ----
+    rprt:
+      anchor:
+        shift: [15.75U + splitgap, 1.5U]
+      rows:
+        r:
+          row_net: R0
+      columns:
+        prtsc: { key.column_net: C8 }
+        scrlk: { key.column_net: C9 }
+        pause: { key.column_net: C10 }
+
+    # ---- Ins Home PgUp (数字行の高さ) ----
+    rnav1:
+      anchor:
+        shift: [15.75U + splitgap, 0]
+      rows:
+        r:
+          row_net: R1
+      columns:
+        ins: { key.column_net: C8 }
+        home: { key.column_net: C9 }
+        pgup: { key.column_net: C10 }
+
+    # ---- Del End PgDn (Tab行の高さ) ----
+    rnav2:
+      anchor:
+        shift: [15.75U + splitgap, -1U]
+      rows:
+        r:
+          row_net: R2
+      columns:
+        del: { key.column_net: C8 }
+        end: { key.column_net: C9 }
+        pgdn: { key.column_net: C10 }
+
+    # ---- ↑ (シフト行の高さ) ----
+    rup:
+      anchor:
+        shift: [16.75U + splitgap, -3U]
+      rows:
+        r:
+          row_net: R4
+      columns:
+        up: { key.column_net: C9 }
+
+    # ---- ← ↓ → (最下段の高さ) ----
+    rarr:
+      anchor:
+        shift: [15.75U + splitgap, -4U]
+      rows:
+        r:
+          row_net: R5
+      columns:
+        left: { key.column_net: C8 }
+        down: { key.column_net: C9 }
+        right: { key.column_net: C10 }
+
+outlines:
+  # 各キーの占有領域 (1uピッチいっぱい)。幅タグごとに矩形を置き、結合して外形の元にする
+  _footprint:
+    - what: rectangle
+      where: k100
+      size: [1U, 1U]
+    - what: rectangle
+      where: k125
+      size: [1.25U, 1U]
+    - what: rectangle
+      where: k150
+      size: [1.5U, 1U]
+    - what: rectangle
+      where: k175
+      size: [1.75U, 1U]
+    - what: rectangle
+      where: k200
+      size: [2U, 1U]
+    - what: rectangle
+      where: k225
+      size: [2.25U, 1U]
+    - what: rectangle
+      where: k275
+      size: [2.75U, 1U]
+    - what: rectangle
+      where: k350
+      size: [3.5U, 1U]
+    - what: rectangle
+      where: k400
+      size: [4U, 1U]
+    # F行のキー間ギャップ (Esc|F1, F8|F9) と数字行との隙間を埋めて外形を一体化するブリッジ
+    - what: rectangle
+      where:
+        shift: [3U, 1.125U]
+      size: [6U, 1.75U]
+    - what: rectangle
+      where:
+        shift: [10.75U + splitgap, 1.125U]
+      size: [8.5U, 1.75U]
+    # ナビゲーションブロック一帯 (0.25U ギャップ・ホーム行の空き・↑キー周りを含む) を埋めるブリッジ
+    - what: rectangle
+      where:
+        shift: [16.5U + splitgap, -1.25U]
+      size: [3.5U, 6.5U]
+
+  # キーキャップのプレビュー用 (左右まとめて確認する)
+  keycaps:
+    - what: rectangle
+      where: k100
+      size: [1U - 1, 1U - 1]
+      corner: 1
+    - what: rectangle
+      where: k125
+      size: [1.25U - 1, 1U - 1]
+      corner: 1
+    - what: rectangle
+      where: k150
+      size: [1.5U - 1, 1U - 1]
+      corner: 1
+    - what: rectangle
+      where: k175
+      size: [1.75U - 1, 1U - 1]
+      corner: 1
+    - what: rectangle
+      where: k200
+      size: [2U - 1, 1U - 1]
+      corner: 1
+    - what: rectangle
+      where: k225
+      size: [2.25U - 1, 1U - 1]
+      corner: 1
+    - what: rectangle
+      where: k275
+      size: [2.75U - 1, 1U - 1]
+      corner: 1
+    - what: rectangle
+      where: k350
+      size: [3.5U - 1, 1U - 1]
+      corner: 1
+    - what: rectangle
+      where: k400
+      size: [4U - 1, 1U - 1]
+      corner: 1
+
+  # キー占有領域を 2mm 外側に膨らませた全体形状 (左右2つの島になる)
+  _field:
+    - what: outline
+      name: _footprint
+      expand: 2
+      joints: 1
+
+  # 左手ボード外形 (全体形状から左手側だけを切り出す)
+  # 切り出し境界は x = 7.25U + 3mm (左手ブロック右端 + マージン2mm と右手ブロック左端の間)
+  board_left:
+    - what: outline
+      name: _field
+    - what: rectangle
+      where:
+        shift: [3.625U - 1.5, -1.25U]
+      size: [7.25U + 9, 6.5U + 12]
+      operation: intersect
+
+  # 右手ボード外形
+  board_right:
+    - what: outline
+      name: _field
+    - what: rectangle
+      where:
+        shift: [12.75U + splitgap / 2 + 4.5, -1.25U]
+      size: [11U + splitgap + 3, 6.5U + 12]
+      operation: intersect
+
+  # スイッチプレート (外形から 14x14mm の MX 用穴を抜く)
+  plate_left:
+    - what: outline
+      name: board_left
+    - what: rectangle
+      where: '/^l/'
+      size: 14
+      operation: subtract
+
+  plate_right:
+    - what: outline
+      name: board_right
+    - what: rectangle
+      where: '/^r/'
+      size: 14
+      operation: subtract
+
+pcbs:
+  ansi60_left:
+    outlines:
+      main:
+        outline: board_left
+    footprints:
+      switches:
+        what: mx
+        where: '/^l/'
+        params:
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+      diodes:
+        what: diode
+        where: '/^l/'
+        adjust:
+          shift: [0, -5]
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+
+  ansi60_right:
+    outlines:
+      main:
+        outline: board_right
+    footprints:
+      switches:
+        what: mx
+        where: '/^r/'
+        params:
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+      diodes:
+        what: diode
+        where: '/^r/'
+        adjust:
+          shift: [0, -5]
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
