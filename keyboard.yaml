@@ -3,8 +3,9 @@ meta:
   name: ansi60_split
   version: 0.2
 
-# ANSI 80% (TKL) 相当の左右分割版 (87キー: スペースを 3.5u + 4u に分割)
-# 最下段は 左: Ctrl/Win/Alt(1.25u) + Space(3.5u), 右: Space(4u) + Alt/Super/Ctrl(1.25u)。
+# ANSI 80% (TKL) 相当の左右分割版 (88キー: スペースを 2.75u + 2.25u に分割)
+# 最下段は 左: Ctrl/Super/Alt(1.5u) + Space(2.75u), 右: Space(2.25u) + Alt/Super/Ctrl(1.5u) + Fn(1u)。
+# 全キーが osume marshmallow ベースキット (M2024V1) のサイズ構成で賄える。
 # 右手側に F行 + ナビゲーションブロック (PrtSc/ScrLk/Pause, Ins/Home/PgUp, Del/End/PgDn, 矢印) を持つ。
 # 分割点はタッチタイピングの運指に合わせて Esc+F1-F4|F5-F12, 5|6, T|Y, G|H, B|N。
 # 1行 = 1ゾーンとして定義し、行ごとのスタッガーは anchor.shift で表現する。
@@ -25,7 +26,7 @@ points:
 
   zones:
     # ================ 左手 ================
-    # ---- F行: Esc [1uギャップ] F1 F2 F3 F4 (数字行との縦ピッチは 1.5U) ----
+    # ---- F行: Esc [0.5uギャップ] F1 F2 F3 F4 (数字行との縦ピッチは 1.5U) ----
     lfn:
       anchor:
         shift: [0.5U, 1.5U]
@@ -36,7 +37,7 @@ points:
         esc: { key.column_net: C0 }
         f1:
           key:
-            spread: 2U
+            spread: 1.5U
             column_net: C1
         f2: { key.column_net: C2 }
         f3: { key.column_net: C3 }
@@ -123,36 +124,36 @@ points:
         v: { key.column_net: C4 }
         b: { key.column_net: C5 }
 
-    # ---- 最下段: Ctrl/Win/Alt(1.25u) Space(3.5u) ----
+    # ---- 最下段: Ctrl/Super/Alt(1.5u) Space(2.75u = 残り幅) ----
     lbot:
       anchor:
-        shift: [0.625U, -4U]
+        shift: [0.75U, -4U]
       rows:
         r:
           row_net: R5
       columns:
         lctl:
           key:
-            width: 1.25U
-            tags: [k125]
+            width: 1.5U
+            tags: [k150]
             column_net: C0
         lgui:
           key:
-            spread: 1.25U
-            width: 1.25U
-            tags: [k125]
+            spread: 1.5U
+            width: 1.5U
+            tags: [k150]
             column_net: C1
         lalt:
           key:
-            spread: 1.25U
-            width: 1.25U
-            tags: [k125]
+            spread: 1.5U
+            width: 1.5U
+            tags: [k150]
             column_net: C2
         spc:
           key:
-            spread: 2.375U
-            width: 3.5U
-            tags: [k350]
+            spread: 2.125U
+            width: 2.75U
+            tags: [k275]
             column_net: C3
 
     # ================ 右手 ================
@@ -261,37 +262,41 @@ points:
             tags: [k275]
             column_net: C5
 
-    # ---- 最下段: Space(4u) Alt/Win/Ctrl(1.25u) ----
+    # ---- 最下段: Space(2.25u) Alt/Super/Ctrl(1.5u) Fn(1u, 右端) ----
     rbot:
       anchor:
-        shift: [9.25U + splitgap, -4U]
+        shift: [8.375U + splitgap, -4U]
       rows:
         r:
           row_net: R5
       columns:
         spc:
           key:
-            width: 4U
-            tags: [k400]
+            width: 2.25U
+            tags: [k225]
             column_net: C0
         ralt:
           key:
-            spread: 2.625U
-            width: 1.25U
-            tags: [k125]
+            spread: 1.875U
+            width: 1.5U
+            tags: [k150]
             column_net: C1
         rgui:
           key:
-            spread: 1.25U
-            width: 1.25U
-            tags: [k125]
+            spread: 1.5U
+            width: 1.5U
+            tags: [k150]
             column_net: C2
         rctl:
           key:
-            spread: 1.25U
-            width: 1.25U
-            tags: [k125]
+            spread: 1.5U
+            width: 1.5U
+            tags: [k150]
             column_net: C3
+        fn:
+          key:
+            spread: 1.25U
+            column_net: C4
 
     # ======== 右手ナビゲーションブロック (80% / TKL 相当, 本体から 0.25U 右) ========
     # ---- PrtSc ScrLk Pause (F行の高さ) ----
@@ -376,12 +381,6 @@ outlines:
     - what: rectangle
       where: k275
       size: [2.75U, 1U]
-    - what: rectangle
-      where: k350
-      size: [3.5U, 1U]
-    - what: rectangle
-      where: k400
-      size: [4U, 1U]
     # F行のキー間ギャップ (Esc|F1, F8|F9) と数字行との隙間を埋めて外形を一体化するブリッジ
     - what: rectangle
       where:
@@ -426,14 +425,6 @@ outlines:
     - what: rectangle
       where: k275
       size: [2.75U - 1, 1U - 1]
-      corner: 1
-    - what: rectangle
-      where: k350
-      size: [3.5U - 1, 1U - 1]
-      corner: 1
-    - what: rectangle
-      where: k400
-      size: [4U - 1, 1U - 1]
       corner: 1
 
   # キー占有領域を 2mm 外側に膨らませた全体形状 (左右2つの島になる)
