@@ -1,3 +1,19 @@
 *.DS_Store
 output/
 .claude/
+
+# Editor local history
+.history/
+
+# KiCad temporary / generated files
+~*.lck
+*.kicad_prl
+*-backups/
+*.kicad_sch-bak
+*.kicad_pcb-bak
+*.bak
+_autosave-*
+fp-info-cache
+
+# Fabrication outputs
+jlcpcb/
