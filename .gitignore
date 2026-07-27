@@ -17,3 +17,6 @@ fp-info-cache
 
 # Fabrication outputs
 jlcpcb/
+
+# 3D printing outputs
+plasticity/
