@@ -1,7 +1,7 @@
 meta:
   engine: 4.1.0
   name: ansi60_split
-  version: 0.21
+  version: 0.29
 
 # ANSI 80% (TKL) からナビゲーションブロックを除いた左右分割版 (80キー: スペースを 2.75u + 2.25u に分割)
 # 最下段は 左: Ctrl/Super/Alt(1.5u) + Space(2.75u), 右: Space(2.25u) + Alt/Super(1.5u) + [0.75uギャップ] + ← ↓ →(1u)。
@@ -27,7 +27,7 @@ points:
 
   zones:
     # ================ 左手 ================
-    # ---- F行: Esc [0.5uギャップ] F1 F2 F3 F4 (数字行との縦ピッチは 1.5U) ----
+    # ---- F行: Esc [1uギャップ] F1 F2 F3 F4 (数字行との縦ピッチは 1.5U) ----
     lfn:
       anchor:
         shift: [0.5U, 1.5U]
@@ -38,7 +38,7 @@ points:
         esc: { key.column_net: C0 }
         f1:
           key:
-            spread: 1.5U
+            spread: 2U
             column_net: C2
         f2: { key.column_net: C3 }
         f3: { key.column_net: C4 }
@@ -161,22 +161,22 @@ points:
     # ---- F行: F5 F6 F7 F8 [0.5uギャップ] F9 F10 F11 F12 ----
     rfn:
       anchor:
-        shift: [6.5U + splitgap, 1.5U]
+        shift: [7U + splitgap, 1.5U]
       rows:
         r:
           row_net: R0
       columns:
-        f5: { key.column_net: C0 }
-        f6: { key.column_net: C1 }
-        f7: { key.column_net: C2 }
-        f8: { key.column_net: C3 }
+        f5: { key.column_net: C1 }
+        f6: { key.column_net: C2 }
+        f7: { key.column_net: C3 }
+        f8: { key.column_net: C4 }
         f9:
           key:
             spread: 1.5U
-            column_net: C4
-        f10: { key.column_net: C5 }
-        f11: { key.column_net: C6 }
-        f12: { key.column_net: C7 }
+            column_net: C5
+        f10: { key.column_net: C6 }
+        f11: { key.column_net: C7 }
+        f12: { key.column_net: C8 }
 
     # ---- 数字行: 6 7 8 9 0 - = Backspace(2u) Del ----
     rnum:
@@ -348,7 +348,7 @@ outlines:
       size: [6U, 1.75U]
     - what: rectangle
       where:
-        shift: [10.25U + splitgap, 1.125U]
+        shift: [10.75U + splitgap, 1.125U]
       size: [8.5U, 1.75U]
     # 右最下段の RSuper|← 間の 0.75u ギャップを埋めるブリッジ
     - what: rectangle
@@ -399,26 +399,88 @@ outlines:
       expand: 2
       joints: 1
 
-  # 左手ボード外形 (全体形状から左手側だけを切り出す)
-  # 切り出し境界は x = 7.25U + 3mm (左手ブロック右端 + マージン2mm と右手ブロック左端の間)
+  # 分割境界側 (x = 6U〜7.25U) は余白なしのキーセルそのまま。左右のボードを
+  # 突き合わせたときに通常の 1u ピッチに収まる段付きエッジになる。
+  _left_edge_cells:
+    - what: outline
+      name: _footprint
+    - what: rectangle
+      where:
+        shift: [6.625U, -1.25U]
+      size: [1.25U, 6.5U + 12]
+      operation: intersect
+
+  _right_edge_cells:
+    - what: outline
+      name: _footprint
+    - what: rectangle
+      where:
+        shift: [6.625U + splitgap, -1.25U]
+      size: [1.25U, 6.5U + 12]
+      operation: intersect
+
+  # 左手ボード外形: x ≤ 6U は 2mm 余白付き、境界側 (6U〜7.25U) はセルそのまま
   board_left:
     - what: outline
       name: _field
     - what: rectangle
       where:
-        shift: [3.625U - 1.5, -1.25U]
-      size: [7.25U + 9, 6.5U + 12]
+        shift: [3U - 3, -1.25U]
+      size: [6U + 6, 6.5U + 12]
       operation: intersect
+    - what: outline
+      name: _left_edge_cells
+      operation: add
+    # 境界ストリップの外周辺 (Space 下端・ダミーセル上端) にだけ 2mm 余白を足して
+    # 外形ラインを一直線にする。それ以外の境界辺は突き合わせ時に右手ボードのキーが
+    # 来る内側の辺なので 0mm のまま。
+    - what: rectangle
+      where:
+        shift: [6.625U, -4.5U - 1]
+      size: [1.25U, 2]
+      operation: add
+    # F4 右の 0.5u 分のダミーセル (キーは置かない) + その上端の 2mm 余白。
+    # 下は F行|数字行の隙間の帯を通って、右手ボードの 6 キー上端の余白ライン
+    # (0.5U + 2mm) まで伸ばす。これで境界エッジが右手ボード左端と同一の段付き形状になり、
+    # 突き合わせたとき隙間なく噛み合う。_footprint に入れると maker.js のブール演算が
+    # 壊れるため、ここで F4 セルと重ねて直接足す。
+    - what: rectangle
+      where:
+        shift: [6.125U, 1.25U + 2]
+      size: [0.75U, 1.5U]
+      operation: add
 
-  # 右手ボード外形
+  # 右手ボード外形: x ≥ 7.25U + splitgap は 2mm 余白付き、境界側はセルそのまま
   board_right:
     - what: outline
       name: _field
     - what: rectangle
       where:
-        shift: [11.75U + splitgap / 2 + 4.5, -1.25U]
-      size: [9U + splitgap + 3, 6.5U + 12]
+        shift: [11.75U + splitgap + 3, -1.25U]
+      size: [9U + 6, 6.5U + 12]
       operation: intersect
+    - what: outline
+      name: _right_edge_cells
+      operation: add
+    # 境界ストリップの外周辺 (6 キー上端と F5 上端) にだけ 2mm 余白を足す。
+    # 下側は突き合わせ時に左手ボードのキーが来る内側の辺なので 0mm のまま。
+    - what: rectangle
+      where:
+        shift: [6.25U + splitgap, 0.5U + 1]
+      size: [0.5U, 2]
+      operation: add
+    - what: rectangle
+      where:
+        shift: [6.875U + splitgap, 2U + 1]
+      size: [0.75U, 2]
+      operation: add
+    # 右端をまっすぐにする埋め板。F12 右の帯とシフト行の切り欠きを埋め、
+    # 右辺を上端から下端まで一直線 (x = 16.25U + 2mm) にする
+    - what: rectangle
+      where:
+        shift: [15.625U + splitgap + 1, -1.25U]
+      size: [1.25U + 2, 6.5U + 4]
+      operation: add
 
   # スイッチプレート (外形から 14x14mm の MX 用穴を抜く)
   plate_left:
@@ -445,9 +507,9 @@ pcbs:
     outlines:
       main:
         outline: board_left
-    # マトリクスは左右共通で COL0-8 x ROW0-5 (9x6)。電気的な列 = 各行の左からの位置。
+    # マトリクスは左右共通で COL0-8 x ROW0-5 (9x6)。列は物理位置に合わせて割り当てる。
     # SW/D 番号 = COL*6 + ROW + 1 (列ごとに上から下)。左手は COL0-5 のみ使い、
-    # キーのないスロット (COL4 の ROW5、COL5 の ROW0/ROW5、COL6-8 全体) は欠番になる。
+    # キーのないスロット (COL1 の ROW0、COL3/COL5 の ROW5、COL6-8 全体) は欠番になる。
     footprints:
       # ---- COL0: Esc ` Tab Caps LShift LCtrl (SW1-SW6 / D1-D6) ----
       sw1: { what: mx, where: '/^lfn_esc_r$/', params: { refname: SW1, from: "{{column_net}}", to: "{{colrow}}" } }
@@ -526,13 +588,10 @@ pcbs:
     outlines:
       main:
         outline: board_right
-    # 左と同じ規則で SW/D 番号 = COL*6 + ROW + 1 (9x6 グリッド、SW1 起点)。
-    # 電気的な列 = 各行の左からの位置 (数字行と Tab行だけ 9 キーあるので COL8 に達する)。
-    # キーのないスロット (COL6 の ROW5、COL7 の ROW4-5、COL8 の ROW0 と ROW3-5) は欠番になる。
+    # 左と同じ規則で SW/D 番号 = COL*6 + ROW + 1 (9x6 グリッド)。列は物理位置に合わせて割り当てる。
+    # キーのないスロット (COL0 の ROW0、COL1/COL3 の ROW5、COL5 の ROW4-5、COL6 の ROW3、COL8 の ROW4) は欠番になる。
     footprints:
-      # ---- COL0: F5 6 Y H N Space (SW1-SW6 / D1-D6) ----
-      sw1: { what: mx, where: '/^rfn_f5_r$/', params: { refname: SW1, from: "{{column_net}}", to: "{{colrow}}" } }
-      d1: { what: diode, where: '/^rfn_f5_r$/', adjust: { shift: [0, -5] }, params: { refname: D1, from: "{{colrow}}", to: "{{row_net}}" } }
+      # ---- COL0: 6 Y H N Space (ROW0 = SW1 は空き) (SW2-SW6 / D2-D6) ----
       sw2: { what: mx, where: '/^rnum_n6_r$/', params: { refname: SW2, from: "{{column_net}}", to: "{{colrow}}" } }
       d2: { what: diode, where: '/^rnum_n6_r$/', adjust: { shift: [0, -5] }, params: { refname: D2, from: "{{colrow}}", to: "{{row_net}}" } }
       sw3: { what: mx, where: '/^rtab_y_r$/', params: { refname: SW3, from: "{{column_net}}", to: "{{colrow}}" } }
@@ -543,9 +602,9 @@ pcbs:
       d5: { what: diode, where: '/^rshift_n_r$/', adjust: { shift: [0, -5] }, params: { refname: D5, from: "{{colrow}}", to: "{{row_net}}" } }
       sw6: { what: mx, where: '/^rbot_spc_r$/', params: { refname: SW6, from: "{{column_net}}", to: "{{colrow}}" } }
       d6: { what: diode, where: '/^rbot_spc_r$/', adjust: { shift: [0, -5] }, params: { refname: D6, from: "{{colrow}}", to: "{{row_net}}" } }
-      # ---- COL1: F6 7 U J M (ROW5 = SW12 は空き) (SW7-SW11 / D7-D11) ----
-      sw7: { what: mx, where: '/^rfn_f6_r$/', params: { refname: SW7, from: "{{column_net}}", to: "{{colrow}}" } }
-      d7: { what: diode, where: '/^rfn_f6_r$/', adjust: { shift: [0, -5] }, params: { refname: D7, from: "{{colrow}}", to: "{{row_net}}" } }
+      # ---- COL1: F5 7 U J M (ROW5 = SW12 は空き) (SW7-SW11 / D7-D11) ----
+      sw7: { what: mx, where: '/^rfn_f5_r$/', params: { refname: SW7, from: "{{column_net}}", to: "{{colrow}}" } }
+      d7: { what: diode, where: '/^rfn_f5_r$/', adjust: { shift: [0, -5] }, params: { refname: D7, from: "{{colrow}}", to: "{{row_net}}" } }
       sw8: { what: mx, where: '/^rnum_n7_r$/', params: { refname: SW8, from: "{{column_net}}", to: "{{colrow}}" } }
       d8: { what: diode, where: '/^rnum_n7_r$/', adjust: { shift: [0, -5] }, params: { refname: D8, from: "{{colrow}}", to: "{{row_net}}" } }
       sw9: { what: mx, where: '/^rtab_u_r$/', params: { refname: SW9, from: "{{column_net}}", to: "{{colrow}}" } }
@@ -554,9 +613,9 @@ pcbs:
       d10: { what: diode, where: '/^rhome_j_r$/', adjust: { shift: [0, -5] }, params: { refname: D10, from: "{{colrow}}", to: "{{row_net}}" } }
       sw11: { what: mx, where: '/^rshift_m_r$/', params: { refname: SW11, from: "{{column_net}}", to: "{{colrow}}" } }
       d11: { what: diode, where: '/^rshift_m_r$/', adjust: { shift: [0, -5] }, params: { refname: D11, from: "{{colrow}}", to: "{{row_net}}" } }
-      # ---- COL2: F7 8 I K , RAlt (SW13-SW18 / D13-D18) ----
-      sw13: { what: mx, where: '/^rfn_f7_r$/', params: { refname: SW13, from: "{{column_net}}", to: "{{colrow}}" } }
-      d13: { what: diode, where: '/^rfn_f7_r$/', adjust: { shift: [0, -5] }, params: { refname: D13, from: "{{colrow}}", to: "{{row_net}}" } }
+      # ---- COL2: F6 8 I K , RAlt (SW13-SW18 / D13-D18) ----
+      sw13: { what: mx, where: '/^rfn_f6_r$/', params: { refname: SW13, from: "{{column_net}}", to: "{{colrow}}" } }
+      d13: { what: diode, where: '/^rfn_f6_r$/', adjust: { shift: [0, -5] }, params: { refname: D13, from: "{{colrow}}", to: "{{row_net}}" } }
       sw14: { what: mx, where: '/^rnum_n8_r$/', params: { refname: SW14, from: "{{column_net}}", to: "{{colrow}}" } }
       d14: { what: diode, where: '/^rnum_n8_r$/', adjust: { shift: [0, -5] }, params: { refname: D14, from: "{{colrow}}", to: "{{row_net}}" } }
       sw15: { what: mx, where: '/^rtab_i_r$/', params: { refname: SW15, from: "{{column_net}}", to: "{{colrow}}" } }
@@ -567,9 +626,9 @@ pcbs:
       d17: { what: diode, where: '/^rshift_comm_r$/', adjust: { shift: [0, -5] }, params: { refname: D17, from: "{{colrow}}", to: "{{row_net}}" } }
       sw18: { what: mx, where: '/^rbot_ralt_r$/', params: { refname: SW18, from: "{{column_net}}", to: "{{colrow}}" } }
       d18: { what: diode, where: '/^rbot_ralt_r$/', adjust: { shift: [0, -5] }, params: { refname: D18, from: "{{colrow}}", to: "{{row_net}}" } }
-      # ---- COL3: F8 9 O L . (ROW5 = SW24 は空き) (SW19-SW23 / D19-D23) ----
-      sw19: { what: mx, where: '/^rfn_f8_r$/', params: { refname: SW19, from: "{{column_net}}", to: "{{colrow}}" } }
-      d19: { what: diode, where: '/^rfn_f8_r$/', adjust: { shift: [0, -5] }, params: { refname: D19, from: "{{colrow}}", to: "{{row_net}}" } }
+      # ---- COL3: F7 9 O L . (ROW5 = SW24 は空き) (SW19-SW23 / D19-D23) ----
+      sw19: { what: mx, where: '/^rfn_f7_r$/', params: { refname: SW19, from: "{{column_net}}", to: "{{colrow}}" } }
+      d19: { what: diode, where: '/^rfn_f7_r$/', adjust: { shift: [0, -5] }, params: { refname: D19, from: "{{colrow}}", to: "{{row_net}}" } }
       sw20: { what: mx, where: '/^rnum_n9_r$/', params: { refname: SW20, from: "{{column_net}}", to: "{{colrow}}" } }
       d20: { what: diode, where: '/^rnum_n9_r$/', adjust: { shift: [0, -5] }, params: { refname: D20, from: "{{colrow}}", to: "{{row_net}}" } }
       sw21: { what: mx, where: '/^rtab_o_r$/', params: { refname: SW21, from: "{{column_net}}", to: "{{colrow}}" } }
@@ -578,9 +637,9 @@ pcbs:
       d22: { what: diode, where: '/^rhome_l_r$/', adjust: { shift: [0, -5] }, params: { refname: D22, from: "{{colrow}}", to: "{{row_net}}" } }
       sw23: { what: mx, where: '/^rshift_dot_r$/', params: { refname: SW23, from: "{{column_net}}", to: "{{colrow}}" } }
       d23: { what: diode, where: '/^rshift_dot_r$/', adjust: { shift: [0, -5] }, params: { refname: D23, from: "{{colrow}}", to: "{{row_net}}" } }
-      # ---- COL4: F9 0 P ; / RSuper (SW25-SW30 / D25-D30) ----
-      sw25: { what: mx, where: '/^rfn_f9_r$/', params: { refname: SW25, from: "{{column_net}}", to: "{{colrow}}" } }
-      d25: { what: diode, where: '/^rfn_f9_r$/', adjust: { shift: [0, -5] }, params: { refname: D25, from: "{{colrow}}", to: "{{row_net}}" } }
+      # ---- COL4: F8 0 P ; / RSuper (SW25-SW30 / D25-D30) ----
+      sw25: { what: mx, where: '/^rfn_f8_r$/', params: { refname: SW25, from: "{{column_net}}", to: "{{colrow}}" } }
+      d25: { what: diode, where: '/^rfn_f8_r$/', adjust: { shift: [0, -5] }, params: { refname: D25, from: "{{colrow}}", to: "{{row_net}}" } }
       sw26: { what: mx, where: '/^rnum_n0_r$/', params: { refname: SW26, from: "{{column_net}}", to: "{{colrow}}" } }
       d26: { what: diode, where: '/^rnum_n0_r$/', adjust: { shift: [0, -5] }, params: { refname: D26, from: "{{colrow}}", to: "{{row_net}}" } }
       sw27: { what: mx, where: '/^rtab_p_r$/', params: { refname: SW27, from: "{{column_net}}", to: "{{colrow}}" } }
@@ -591,18 +650,18 @@ pcbs:
       d29: { what: diode, where: '/^rshift_slsh_r$/', adjust: { shift: [0, -5] }, params: { refname: D29, from: "{{colrow}}", to: "{{row_net}}" } }
       sw30: { what: mx, where: '/^rbot_rgui_r$/', params: { refname: SW30, from: "{{column_net}}", to: "{{colrow}}" } }
       d30: { what: diode, where: '/^rbot_rgui_r$/', adjust: { shift: [0, -5] }, params: { refname: D30, from: "{{colrow}}", to: "{{row_net}}" } }
-      # ---- COL5: F10 - [ ' (ROW4-5 = SW35-36 は空き) (SW31-SW34 / D31-D34) ----
-      sw31: { what: mx, where: '/^rfn_f10_r$/', params: { refname: SW31, from: "{{column_net}}", to: "{{colrow}}" } }
-      d31: { what: diode, where: '/^rfn_f10_r$/', adjust: { shift: [0, -5] }, params: { refname: D31, from: "{{colrow}}", to: "{{row_net}}" } }
+      # ---- COL5: F9 - [ ' (ROW4-5 = SW35-36 は空き) (SW31-SW34 / D31-D34) ----
+      sw31: { what: mx, where: '/^rfn_f9_r$/', params: { refname: SW31, from: "{{column_net}}", to: "{{colrow}}" } }
+      d31: { what: diode, where: '/^rfn_f9_r$/', adjust: { shift: [0, -5] }, params: { refname: D31, from: "{{colrow}}", to: "{{row_net}}" } }
       sw32: { what: mx, where: '/^rnum_minus_r$/', params: { refname: SW32, from: "{{column_net}}", to: "{{colrow}}" } }
       d32: { what: diode, where: '/^rnum_minus_r$/', adjust: { shift: [0, -5] }, params: { refname: D32, from: "{{colrow}}", to: "{{row_net}}" } }
       sw33: { what: mx, where: '/^rtab_lbrc_r$/', params: { refname: SW33, from: "{{column_net}}", to: "{{colrow}}" } }
       d33: { what: diode, where: '/^rtab_lbrc_r$/', adjust: { shift: [0, -5] }, params: { refname: D33, from: "{{colrow}}", to: "{{row_net}}" } }
       sw34: { what: mx, where: '/^rhome_quot_r$/', params: { refname: SW34, from: "{{column_net}}", to: "{{colrow}}" } }
       d34: { what: diode, where: '/^rhome_quot_r$/', adjust: { shift: [0, -5] }, params: { refname: D34, from: "{{colrow}}", to: "{{row_net}}" } }
-      # ---- COL6: F11 = ] RShift ← (ROW3 = SW40 は空き) (SW37-SW39, SW41-SW42 / D37-D39, D41-D42) ----
-      sw37: { what: mx, where: '/^rfn_f11_r$/', params: { refname: SW37, from: "{{column_net}}", to: "{{colrow}}" } }
-      d37: { what: diode, where: '/^rfn_f11_r$/', adjust: { shift: [0, -5] }, params: { refname: D37, from: "{{colrow}}", to: "{{row_net}}" } }
+      # ---- COL6: F10 = ] RShift ← (ROW3 = SW40 は空き) (SW37-SW39, SW41-SW42 / D37-D39, D41-D42) ----
+      sw37: { what: mx, where: '/^rfn_f10_r$/', params: { refname: SW37, from: "{{column_net}}", to: "{{colrow}}" } }
+      d37: { what: diode, where: '/^rfn_f10_r$/', adjust: { shift: [0, -5] }, params: { refname: D37, from: "{{colrow}}", to: "{{row_net}}" } }
       sw38: { what: mx, where: '/^rnum_equal_r$/', params: { refname: SW38, from: "{{column_net}}", to: "{{colrow}}" } }
       d38: { what: diode, where: '/^rnum_equal_r$/', adjust: { shift: [0, -5] }, params: { refname: D38, from: "{{colrow}}", to: "{{row_net}}" } }
       sw39: { what: mx, where: '/^rtab_rbrc_r$/', params: { refname: SW39, from: "{{column_net}}", to: "{{colrow}}" } }
@@ -611,9 +670,9 @@ pcbs:
       d41: { what: diode, where: '/^rshift_rsft_r$/', adjust: { shift: [0, -5] }, params: { refname: D41, from: "{{colrow}}", to: "{{row_net}}" } }
       sw42: { what: mx, where: '/^rbot_left_r$/', params: { refname: SW42, from: "{{column_net}}", to: "{{colrow}}" } }
       d42: { what: diode, where: '/^rbot_left_r$/', adjust: { shift: [0, -5] }, params: { refname: D42, from: "{{colrow}}", to: "{{row_net}}" } }
-      # ---- COL7: F12 Backspace \\ Enter ↑ ↓ (SW43-SW48 / D43-D48) ----
-      sw43: { what: mx, where: '/^rfn_f12_r$/', params: { refname: SW43, from: "{{column_net}}", to: "{{colrow}}" } }
-      d43: { what: diode, where: '/^rfn_f12_r$/', adjust: { shift: [0, -5] }, params: { refname: D43, from: "{{colrow}}", to: "{{row_net}}" } }
+      # ---- COL7: F11 Backspace \\ Enter ↑ ↓ (SW43-SW48 / D43-D48) ----
+      sw43: { what: mx, where: '/^rfn_f11_r$/', params: { refname: SW43, from: "{{column_net}}", to: "{{colrow}}" } }
+      d43: { what: diode, where: '/^rfn_f11_r$/', adjust: { shift: [0, -5] }, params: { refname: D43, from: "{{colrow}}", to: "{{row_net}}" } }
       sw44: { what: mx, where: '/^rnum_bksp_r$/', params: { refname: SW44, from: "{{column_net}}", to: "{{colrow}}" } }
       d44: { what: diode, where: '/^rnum_bksp_r$/', adjust: { shift: [0, -5] }, params: { refname: D44, from: "{{colrow}}", to: "{{row_net}}" } }
       sw45: { what: mx, where: '/^rtab_bsls_r$/', params: { refname: SW45, from: "{{column_net}}", to: "{{colrow}}" } }
@@ -624,7 +683,9 @@ pcbs:
       d47: { what: diode, where: '/^rshift_up_r$/', adjust: { shift: [0, -5] }, params: { refname: D47, from: "{{colrow}}", to: "{{row_net}}" } }
       sw48: { what: mx, where: '/^rbot_down_r$/', params: { refname: SW48, from: "{{column_net}}", to: "{{colrow}}" } }
       d48: { what: diode, where: '/^rbot_down_r$/', adjust: { shift: [0, -5] }, params: { refname: D48, from: "{{colrow}}", to: "{{row_net}}" } }
-      # ---- COL8: Del PgUp PgDn → (ROW0 = SW49, ROW4 = SW53 は空き) (SW50-SW52, SW54 / D50-D52, D54) ----
+      # ---- COL8: F12 Del PgUp PgDn → (ROW4 = SW53 は空き) (SW49-SW52, SW54 / D49-D52, D54) ----
+      sw49: { what: mx, where: '/^rfn_f12_r$/', params: { refname: SW49, from: "{{column_net}}", to: "{{colrow}}" } }
+      d49: { what: diode, where: '/^rfn_f12_r$/', adjust: { shift: [0, -5] }, params: { refname: D49, from: "{{colrow}}", to: "{{row_net}}" } }
       sw50: { what: mx, where: '/^rnum_del_r$/', params: { refname: SW50, from: "{{column_net}}", to: "{{colrow}}" } }
       d50: { what: diode, where: '/^rnum_del_r$/', adjust: { shift: [0, -5] }, params: { refname: D50, from: "{{colrow}}", to: "{{row_net}}" } }
       sw51: { what: mx, where: '/^rtab_pgup_r$/', params: { refname: SW51, from: "{{column_net}}", to: "{{colrow}}" } }
