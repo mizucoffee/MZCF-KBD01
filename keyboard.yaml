@@ -442,13 +442,21 @@ outlines:
     # F4 右の 0.5u 分のダミーセル (キーは置かない) + その上端の 2mm 余白。
     # 下は F行|数字行の隙間の帯を通って、右手ボードの 6 キー上端の余白ライン
     # (0.5U + 2mm) まで伸ばす。これで境界エッジが右手ボード左端と同一の段付き形状になり、
-    # 突き合わせたとき隙間なく噛み合う。_footprint に入れると maker.js のブール演算が
-    # 壊れるため、ここで F4 セルと重ねて直接足す。
+    # 突き合わせたとき噛み合う (実クリアランスは board_right 側を 0.3mm 後退させて確保)。
+    # _footprint に入れると maker.js のブール演算が壊れるため、ここで F4 セルと重ねて直接足す。
     - what: rectangle
       where:
         shift: [6.125U, 1.25U + 2]
       size: [0.75U, 1.5U]
       operation: add
+    # RP2040-Zero (U1) 裏面部品の逃がし切り欠き (上辺から 12.7 x 21.05mm)。
+    # U1 は KiCad 側で手動配置のため mm 直値 (KiCad 座標 (48.77, 31.5925) ≒ ergogen x 27.815 に対応。
+    # 切り欠き中心 x=27.94 は KiCad 上の手描き値に合わせた値)。上方向は外形より 2mm 突き抜けさせて確実に開口する。
+    - what: rectangle
+      where:
+        shift: [27.94, 30.575]
+      size: [12.7, 1U + 4]
+      operation: subtract
 
   # 右手ボード外形: x ≥ 7.25U + splitgap は 2mm 余白付き、境界側はセルそのまま
   board_right:
@@ -481,6 +489,75 @@ outlines:
         shift: [15.625U + splitgap + 1, -1.25U]
       size: [1.25U + 2, 6.5U + 4]
       operation: add
+    # ==== 左手ボードとの突き合わせクリアランス ====
+    # 外形ルーティング公差 (JLCPCB ±0.2mm/枚) を吸収するため、噛み合い面 8面を
+    # 右手ボード側だけ一律 0.3mm 後退させる (左手ボードは基準のまま = 面ごとのギャップ 0.3mm)。
+    # 各減算矩形は「内側の辺 = 後退後の新しい面」に置き、反対側と長手方向の端は旧外形の
+    # 1mm 外側まではみ出させる (辺が旧外形線と完全一致すると maker.js のブール演算が壊れるため)。
+    # ただし残す材料に接する端だけは新しい隣接面の位置でぴったり止める。
+    # 凸角の R1.0 丸め (計8箇所) は maker.js のフィレットが合成外形に選択的に効かせられないため
+    # yaml では未表現。KiCad 側で付与済みなので、再生成して取り込む場合は要再付与。
+    # 縦面: タブ先端 (x = 6U+splitgap → +0.3)
+    - what: rectangle
+      where:
+        shift: [6U + splitgap - 0.35, 1]
+      size: [1.3, 1U + 4]
+      operation: subtract
+    # 縦面: 6キー上端側の本体左辺 (x = 6.5U+splitgap → +0.3, タブより上)
+    - what: rectangle
+      where:
+        shift: [6.5U + splitgap - 0.35, 1.25U + 2.35]
+      size: [1.3, 1.5U + 1.3]
+      operation: subtract
+    # 縦面: タブ根元より下の本体左辺 (x = 6.5U+splitgap → +0.3, タブ下〜1段目踏み面)
+    - what: rectangle
+      where:
+        shift: [6.5U + splitgap - 0.35, -1U - 0.35]
+      size: [1.3, 1U + 1.3]
+      operation: subtract
+    # 縦面: 階段 2段目 (x = 6.75U+splitgap → +0.3)
+    - what: rectangle
+      where:
+        shift: [6.75U + splitgap - 0.35, -2U - 0.35]
+      size: [1.3, 1U + 1.3]
+      operation: subtract
+    # 縦面: 階段 3段目〜下端 (x = 7.25U+splitgap → +0.3)
+    - what: rectangle
+      where:
+        shift: [7.25U + splitgap - 0.35, -3.5U - 1.35]
+      size: [1.3, 2U + 3.3]
+      operation: subtract
+    # 横面: タブ上辺 (y = 0.5U+2 → -0.3)
+    - what: rectangle
+      where:
+        shift: [6.25U + splitgap - 0.35, 0.5U + 2.35]
+      size: [0.5U + 1.3, 1.3]
+      operation: subtract
+    # 横面: タブ下辺 (y = -0.5U → +0.3 ※ergogen座標は上向き正)
+    - what: rectangle
+      where:
+        shift: [6.25U + splitgap - 0.35, -0.5U - 0.35]
+      size: [0.5U + 1.3, 1.3]
+      operation: subtract
+    # 横面: 階段 1段目の踏み面 (y = -1.5U → -0.3)
+    - what: rectangle
+      where:
+        shift: [6.625U + splitgap - 0.35, -1.5U - 0.35]
+      size: [0.25U + 1.3, 1.3]
+      operation: subtract
+    # 横面: 階段 2段目の踏み面 (y = -2.5U → -0.3)
+    - what: rectangle
+      where:
+        shift: [7U + splitgap - 0.35, -2.5U - 0.35]
+      size: [0.5U + 1.3, 1.3]
+      operation: subtract
+    # RP2040-Zero (U1) 裏面部品の逃がし切り欠き (上辺から 12.7 x 21.05mm、左手ボードと同寸)。
+    # U1 は KiCad 側で手動配置のため mm 直値 (KiCad 座標 (201.295, 33.02) に対応)。
+    - what: rectangle
+      where:
+        shift: [326.545, 30.575]
+      size: [12.7, 1U + 4]
+      operation: subtract
 
   # スイッチプレート (外形から 14x14mm の MX 用穴を抜く)
   plate_left:
