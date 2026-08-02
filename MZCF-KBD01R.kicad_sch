@@ -1378,12 +1378,6 @@
 		(uuid "00389748-f6a1-4ef0-b9d0-b7039d16dd9c")
 	)
 	(junction
-		(at 238.76 33.02)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "04863b36-0bea-41da-9ec1-07072a27fa73")
-	)
-	(junction
 		(at 86.36 86.36)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1418,6 +1412,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "0f202223-8976-4115-9415-9b8080e5dc5c")
+	)
+	(junction
+		(at 238.76 33.02)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "17ecc114-08e9-46e7-8d04-e924a749dffa")
 	)
 	(junction
 		(at 187.96 104.14)
@@ -1975,6 +1975,16 @@
 	)
 	(wire
 		(pts
+			(xy 238.76 33.02) (xy 238.76 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0641ac3e-d232-4d10-b292-c90dd2c2d4a2")
+	)
+	(wire
+		(pts
 			(xy 45.72 58.42) (xy 71.12 58.42)
 		)
 		(stroke
@@ -2405,26 +2415,6 @@
 	)
 	(wire
 		(pts
-			(xy 238.76 33.02) (xy 238.76 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5d5a90ab-23a3-4663-94b4-c40ed0553f5b")
-	)
-	(wire
-		(pts
-			(xy 247.65 33.02) (xy 248.92 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5e8d3059-dbbd-4643-826d-e2a058053af7")
-	)
-	(wire
-		(pts
 			(xy 223.52 93.98) (xy 248.92 93.98)
 		)
 		(stroke
@@ -2682,16 +2672,6 @@
 			(type default)
 		)
 		(uuid "8ec87305-e52a-4cf0-bdbd-3f2051a31f9f")
-	)
-	(wire
-		(pts
-			(xy 238.76 33.02) (xy 241.3 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8fdeb005-a00b-4e52-a1ca-9d1514d84349")
 	)
 	(wire
 		(pts
@@ -3353,16 +3333,6 @@
 		)
 		(uuid "100ad67a-a404-419e-a156-c9456df0af06")
 	)
-	(label "BTN1"
-		(at 241.3 33.02 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "12a7b086-9555-4b04-8768-2bc5154b2502")
-	)
 	(label "COL7"
 		(at 213.36 27.94 180)
 		(effects
@@ -3522,16 +3492,6 @@
 			(justify right bottom)
 		)
 		(uuid "c4f82544-fef8-42fe-aa98-a19d1f2942e2")
-	)
-	(label "BTN2"
-		(at 247.65 33.02 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "d187c9b9-88ed-41f6-9bdc-51f169776575")
 	)
 	(label "ROW2"
 		(at 30.48 76.2 180)
@@ -6298,7 +6258,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -6826,7 +6786,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -7114,7 +7074,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -7402,7 +7362,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -8266,7 +8226,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -8334,6 +8294,86 @@
 			(project "MZCF-KBD01R"
 				(path "/f5c13eaf-2e54-42a0-a467-9320430ea57c"
 					(reference "SW40")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push")
+		(at 243.84 33.02 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "73950dd2-9299-4680-9c4f-01c1c7734989")
+		(property "Reference" "SW49"
+			(at 243.84 25.4 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW_Push"
+			(at 243.84 27.94 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 243.84 27.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 243.84 27.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Push button switch, generic, two pins"
+			(at 243.84 33.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "e42934eb-4b55-459e-b48f-c064a377f77f")
+		)
+		(pin "2"
+			(uuid "84cb860e-61bf-4607-b47e-fb4ed7dbb45c")
+		)
+		(instances
+			(project "MZCF-KBD01R"
+				(path "/f5c13eaf-2e54-42a0-a467-9320430ea57c"
+					(reference "SW49")
 					(unit 1)
 				)
 			)
@@ -8450,7 +8490,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -9482,7 +9522,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -10034,7 +10074,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -10874,7 +10914,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -11058,7 +11098,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -11175,7 +11215,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -11279,7 +11319,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -12288,7 +12328,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -13240,7 +13280,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -13712,7 +13752,7 @@
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
