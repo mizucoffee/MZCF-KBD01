@@ -1,6 +1,6 @@
 # MZCF-KBD01
 
-RP2040-Zero を搭載した左右分割の自作キーボード。レイアウトは [ergogen](https://github.com/ergogen/ergogen) で生成し、KiCad 10 で設計しています。
+RP2040-Zero を搭載した分割キーボード。レイアウトは [ergogen](https://github.com/ergogen/ergogen) で生成し、KiCad 10 で設計しています。
 
 ## 構成
 
@@ -10,6 +10,7 @@ RP2040-Zero を搭載した左右分割の自作キーボード。レイアウ�
 | `pcb/` | KiCad プロジェクト(左: `MZCF-KBD01L.*`、右: `MZCF-KBD01R.*`)と部品ライブラリ |
 | `cad/` | Plasticity 3D モデル |
 | `firmware/` | QMK ファームウェア(キーボード定義・キーマップ) |
+| `docs/` | ドキュメント用画像(キーマップレイアウト図) |
 
 ## 主要部品
 
@@ -28,9 +29,9 @@ Mac レイヤー左下の 🌐/fn キーは [tzarc/qmk_modules](https://github.c
 
 ### キーマップ
 
-![Windows / Linux レイアウト](firmware/docs/layout-win.svg)
+![Windows / Linux レイアウト](docs/layout-win.svg)
 
-![macOS / iOS レイアウト](firmware/docs/layout-mac.svg)
+![macOS / iOS レイアウト](docs/layout-mac.svg)
 
 ### ファームウェア構成
 
@@ -41,12 +42,12 @@ Mac レイヤー左下の 🌐/fn キーは [tzarc/qmk_modules](https://github.c
 
 ### セットアップ(初回のみ)
 
-QMK CLI をインストールし、qmk_firmware を取得したうえで、`firmware/mzcf_kbd01` を symlink します。
+QMK CLI をインストールし、qmk_firmware を取得したうえで、`firmware/` を `mzcf_kbd01` という名前で symlink します(キーボード名は symlink 名で決まります)。
 
 ```sh
 brew install qmk/qmk/qmk        # または pipx install qmk
 qmk setup -H ~/qmk_firmware
-ln -sfn "$(pwd)/firmware/mzcf_kbd01" ~/qmk_firmware/keyboards/mzcf_kbd01   # リポジトリ root で実行
+ln -sfn "$(pwd)/firmware" ~/qmk_firmware/keyboards/mzcf_kbd01   # リポジトリ root で実行
 
 # コミュニティモジュール(Mac用 🌐/fn キーに使用)
 git clone https://github.com/tzarc/qmk_modules.git ~/qmk_firmware/modules/tzarc
