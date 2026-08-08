@@ -26,6 +26,12 @@ RP2040-Zero を搭載した左右分割の自作キーボード。レイアウ�
 
 Mac レイヤー左下の 🌐/fn キーは [tzarc/qmk_modules](https://github.com/tzarc/qmk_modules) の `globe_key` モジュール(コンシューマページ `AC Next Keyboard Layout Select` 0x029D を送信)によるもので、macOS に Globe キーとして認識されます。Apple 純正 fn の全機能(fn+矢印での PgUp/Home、fn+F キーの切り替え等)は再現されない簡易実装です。
 
+### キーマップ
+
+![Windows / Linux レイアウト](firmware/docs/layout-win.svg)
+
+![macOS / iOS レイアウト](firmware/docs/layout-mac.svg)
+
 ### ファームウェア構成
 
 - 各半分に Waveshare RP2040-Zero(USB-C 搭載)
