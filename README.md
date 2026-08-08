@@ -1,5 +1,7 @@
 # MZCF-KBD01 V1 Rev.2
 
+![キーボード写真](assets/image.jpg)
+
 RP2040-Zero を搭載した分割キーボード。レイアウトは [ergogen](https://github.com/ergogen/ergogen) で生成し、KiCad 10 で設計しています。
 
 ## 構成
@@ -29,9 +31,9 @@ Mac レイヤー左下の 🌐/fn キーは [tzarc/qmk_modules](https://github.c
 
 ### キーマップ
 
-![Windows / Linux レイアウト](docs/layout-win.svg)
+![Windows / Linux レイアウト](assets/layout-win.svg)
 
-![macOS / iOS レイアウト](docs/layout-mac.svg)
+![macOS / iOS レイアウト](assets/layout-mac.svg)
 
 ### ファームウェア構成
 
