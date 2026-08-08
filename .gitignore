@@ -20,3 +20,5 @@ jlcpcb/
 
 # 3D printing outputs
 plasticity/
+*.stl
+*.3mf

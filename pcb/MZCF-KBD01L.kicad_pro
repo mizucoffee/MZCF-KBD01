@@ -39,9 +39,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.0,
-          "height": 0.61,
-          "width": 1.01
+          "drill": 0.762,
+          "height": 1.524,
+          "width": 1.524
         },
         "silk_line_width": 0.12,
         "silk_text_italic": false,
@@ -69,9 +69,16 @@
           "thermal_relief_spoke_width": 0.5
         }
       },
-      "diff_pair_dimensions": [],
+      "diff_pair_dimensions": [
+        {
+          "gap": 0.0,
+          "via_gap": 0.0,
+          "width": 0.0
+        }
+      ],
       "drc_exclusions": [],
       "meta": {
+        "filename": "board_design_settings.json",
         "version": 2
       },
       "rule_severities": {
@@ -203,7 +210,9 @@
           "td_width_to_size_filter_ratio": 0.9
         }
       ],
-      "track_widths": [],
+      "track_widths": [
+        0.0
+      ],
       "tuning_pattern_settings": {
         "diff_pair_defaults": {
           "corner_radius_percentage": 80,
@@ -230,7 +239,12 @@
           "spacing": 0.6
         }
       },
-      "via_dimensions": [],
+      "via_dimensions": [
+        {
+          "diameter": 0.0,
+          "drill": 0.0
+        }
+      ],
       "zones_allow_external_fillets": false
     },
     "ipc2581": {
@@ -506,7 +520,7 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 2147483647,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.3,
+        "track_width": 0.25,
         "tuning_profile": "",
         "via_diameter": 0.6,
         "via_drill": 0.3,
@@ -514,12 +528,8 @@
       },
       {
         "clearance": 0.2,
-        "diff_pair_gap": 0.25,
-        "diff_pair_width": 0.2,
-        "microvia_diameter": 0.3,
-        "microvia_drill": 0.1,
         "name": "Power",
-        "pcb_color": "rgb(255, 20, 16)",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 0,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.5,
@@ -548,35 +558,7 @@
       },
       {
         "netclass": "Default",
-        "pattern": "C1"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "f1_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "C2"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "f2_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "C3"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "f3_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "C4"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "f4_r"
+        "pattern": "R0"
       },
       {
         "netclass": "Default",
@@ -584,27 +566,7 @@
       },
       {
         "netclass": "Default",
-        "pattern": "n1_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "n2_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "n3_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "n4_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "C5"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "n5_r"
+        "pattern": "R1"
       },
       {
         "netclass": "Default",
@@ -612,23 +574,7 @@
       },
       {
         "netclass": "Default",
-        "pattern": "q_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "w_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "e_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "r_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "t_r"
+        "pattern": "R2"
       },
       {
         "netclass": "Default",
@@ -636,23 +582,7 @@
       },
       {
         "netclass": "Default",
-        "pattern": "a_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "s_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "d_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "f_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "g_r"
+        "pattern": "R3"
       },
       {
         "netclass": "Default",
@@ -660,23 +590,7 @@
       },
       {
         "netclass": "Default",
-        "pattern": "z_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "x_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "c_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "v_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "b_r"
+        "pattern": "R4"
       },
       {
         "netclass": "Default",
@@ -684,7 +598,55 @@
       },
       {
         "netclass": "Default",
+        "pattern": "R5"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "C1"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "n1_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "q_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "a_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "z_r"
+      },
+      {
+        "netclass": "Default",
         "pattern": "lgui_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "C2"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "f1_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "n2_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "w_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "s_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "x_r"
       },
       {
         "netclass": "Default",
@@ -692,275 +654,87 @@
       },
       {
         "netclass": "Default",
+        "pattern": "C3"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "f2_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "n3_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "e_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "d_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "c_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "C4"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "f3_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "n4_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "r_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "f_r"
+      },
+      {
+        "netclass": "Default",
+        "pattern": "v_r"
+      },
+      {
+        "netclass": "Default",
         "pattern": "spc_r"
       },
       {
         "netclass": "Default",
-        "pattern": "R0"
+        "pattern": "C5"
       },
       {
         "netclass": "Default",
-        "pattern": "R1"
+        "pattern": "f4_r"
       },
       {
         "netclass": "Default",
-        "pattern": "R2"
+        "pattern": "n5_r"
       },
       {
         "netclass": "Default",
-        "pattern": "R3"
+        "pattern": "t_r"
       },
       {
         "netclass": "Default",
-        "pattern": "R4"
+        "pattern": "g_r"
       },
       {
         "netclass": "Default",
-        "pattern": "R5"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "f5_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "n6_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "y_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "h_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "n_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "f6_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "n7_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "u_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "j_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "m_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "ralt_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "f7_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "n8_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "i_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "k_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "comm_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "rgui_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "f8_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "n9_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "o_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "l_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "dot_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "rctl_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "f9_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "n0_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "p_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "scln_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "slsh_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "fn_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "f10_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "minus_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "lbrc_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "quot_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "rsft_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "C6"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "f11_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "equal_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "rbrc_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "ent_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "C7"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "f12_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "bksp_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "bsls_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "C8"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "prtsc_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "ins_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "del_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "left_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "C9"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "scrlk_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "home_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "end_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "up_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "down_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "C10"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "pause_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "pgup_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "pgdn_r"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "right_r"
-      },
-      {
-        "netclass": "Power",
-        "pattern": "Net-(U1-5V)"
+        "pattern": "b_r"
       },
       {
         "netclass": "Power",
         "pattern": "Net-(U1-GND)"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "Net-(U1-5V)"
       }
     ]
   },
