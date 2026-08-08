@@ -6,11 +6,10 @@ RP2040-Zero を搭載した左右分割の自作キーボード。レイアウ�
 
 | パス | 内容 |
 |---|---|
-| `MZCF-KBD01L.*` | 左手側プロジェクト(回路図・基板) |
-| `MZCF-KBD01R.*` | 右手側プロジェクト(回路図) |
-| `keyboard.yaml` | ergogen 設定(レイアウト定義) |
-| `ergogen/` | ergogen 実行用ディレクトリ(カスタムフットプリント含む) |
-| `libs/` | プロジェクトローカルの部品ライブラリ |
+| `ergogen/` | ergogen 実行用ディレクトリ(レイアウト定義 `config.yaml`・カスタムフットプリント) |
+| `pcb/` | KiCad プロジェクト(左: `MZCF-KBD01L.*`、右: `MZCF-KBD01R.*`)と部品ライブラリ |
+| `cad/` | Plasticity 3D モデル |
+| `firmware/` | QMK ファームウェア(ビルド・書き込み手順は `firmware/README.md`) |
 
 ## 主要部品
 
@@ -21,4 +20,4 @@ RP2040-Zero を搭載した左右分割の自作キーボード。レイアウ�
 
 ## ライブラリについて
 
-`libs/lcsc/` のシンボル・フットプリントは LCSC / EasyEDA のデータを変換したものです。
+`pcb/libs/lcsc/` のシンボル・フットプリントは LCSC / EasyEDA のデータを変換したものです。
