@@ -1,4 +1,4 @@
-# MZCF-KBD01
+# MZCF-KBD01 V1 Rev.2
 
 RP2040-Zero を搭載した分割キーボード。レイアウトは [ergogen](https://github.com/ergogen/ergogen) で生成し、KiCad 10 で設計しています。
 
